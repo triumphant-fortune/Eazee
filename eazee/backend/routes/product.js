@@ -5,17 +5,15 @@ import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Add a product
 router.post('/', authMiddleware, upload.single('media'), async (req, res) => {
   try {
-    const { name, price, description } = req.body;
+    const { name, price, description, stock_tag } = req.body;
     const vendorId = req.user.id;
 
     if (!name || !price) return res.status(400).json({ error: 'Name and price are required' });
 
     let media_url = null;
     let media_type = 'image';
-
     if (req.file) {
       media_url = req.file.path;
       media_type = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
@@ -28,6 +26,7 @@ router.post('/', authMiddleware, upload.single('media'), async (req, res) => {
       description: description || '',
       media_url,
       media_type,
+      stock_tag: stock_tag || 'fully_stocked',
       is_available: true
     }).select().single();
 
@@ -38,7 +37,6 @@ router.post('/', authMiddleware, upload.single('media'), async (req, res) => {
   }
 });
 
-// Get all products for logged-in vendor
 router.get('/mine', authMiddleware, async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -54,14 +52,13 @@ router.get('/mine', authMiddleware, async (req, res) => {
   }
 });
 
-// Update product
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
-    const { name, price, description, is_available } = req.body;
+    const { name, price, description, is_available, stock_tag } = req.body;
 
     const { data, error } = await supabase
       .from('products')
-      .update({ name, price: parseFloat(price), description, is_available })
+      .update({ name, price: parseFloat(price), description, is_available, stock_tag })
       .eq('id', req.params.id)
       .eq('vendor_id', req.user.id)
       .select()
@@ -74,7 +71,6 @@ router.put('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Delete product
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const { error } = await supabase
