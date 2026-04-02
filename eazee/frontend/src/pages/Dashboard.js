@@ -23,10 +23,10 @@ const PALETTE_LIST = [
 ];
 
 const STOCK_TAGS = [
-  { id: 'fully_stocked', label: '✅ Fully stocked', color: '#16a34a', bg: '#f0fdf4' },
-  { id: 'limited_stock', label: '⚠️ Limited stock', color: '#d97706', bg: '#fffbeb' },
-  { id: 'running_out', label: '🔥 Running out', color: '#ea580c', bg: '#fff7ed' },
-  { id: 'out_of_stock', label: '❌ Out of stock', color: '#dc2626', bg: '#fef2f2' },
+  { id: 'fully_stocked', label: 'Fully stocked', color: '#16a34a', bg: '#f0fdf4', dot: '#16a34a' },
+  { id: 'limited_stock', label: 'Limited stock', color: '#d97706', bg: '#fffbeb', dot: '#d97706' },
+  { id: 'running_out', label: 'Running out', color: '#ea580c', bg: '#fff7ed', dot: '#ea580c' },
+  { id: 'out_of_stock', label: 'Out of stock', color: '#dc2626', bg: '#fef2f2', dot: '#dc2626' },
 ];
 
 export default function Dashboard() {
@@ -104,6 +104,7 @@ export default function Dashboard() {
     try {
       const data = await api.post('/api/ai/description', { product_name: productForm.name, price: productForm.price });
       if (data.description) setProductForm(f => ({ ...f, description: data.description }));
+      else toast.error('Could not generate description');
     } catch { toast.error('Could not generate description'); }
     finally { setGeneratingDesc(false); }
   };
@@ -191,14 +192,22 @@ export default function Dashboard() {
       <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <button onClick={() => setShowEditProfile(true)} className="flex items-center gap-3 hover:opacity-80 transition">
-            {vendor?.logo_url ? <img src={vendor.logo_url} alt="Logo" className="w-9 h-9 rounded-xl object-cover" /> : <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: palette.primary }}>{vendor?.business_name?.[0]}</div>}
+            {vendor?.logo_url
+              ? <img src={vendor.logo_url} alt="Logo" className="w-9 h-9 rounded-xl object-cover" />
+              : <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: palette.primary }}>{vendor?.business_name?.[0]}</div>
+            }
             <div className="text-left">
               <p className="font-semibold text-gray-800 text-sm">{vendor?.business_name}</p>
-              <p className="text-xs text-gray-400">Tap to edit profile ✏️</p>
+              <p className="text-xs text-gray-400">Tap to edit profile</p>
             </div>
           </button>
           <div className="flex items-center gap-2">
-            <button onClick={() => navigate('/captions')} className="text-xs px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition font-medium">✍️ Captions</button>
+            <button
+              onClick={() => navigate('/captions')}
+              className="text-xs px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition font-medium"
+            >
+              Captions
+            </button>
             <button onClick={signOut} className="text-xs px-3 py-2 rounded-lg text-gray-400 hover:text-gray-600 transition">Log out</button>
           </div>
         </div>
@@ -221,11 +230,11 @@ export default function Dashboard() {
           <p className="text-xs font-medium mb-2" style={{ color: palette.primary }}>Your store link</p>
           <div className="flex items-center gap-2">
             <div className="flex-1 bg-white rounded-xl px-3 py-2 text-sm text-gray-600 border border-gray-100 truncate">{storeUrl}</div>
-            <button onClick={copyLink} className="px-3 py-2 rounded-xl text-sm font-medium text-white flex-shrink-0" style={{ backgroundColor: palette.primary }}>{copied ? '✓' : 'Copy'}</button>
+            <button onClick={copyLink} className="px-3 py-2 rounded-xl text-sm font-medium text-white flex-shrink-0" style={{ backgroundColor: palette.primary }}>{copied ? 'Copied' : 'Copy'}</button>
           </div>
           <div className="flex gap-2 mt-3">
-            <a href={storeUrl} target="_blank" rel="noreferrer" className="text-xs font-medium px-3 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition">👁 Preview</a>
-            <a href={`https://wa.me/?text=Check out my store: ${encodeURIComponent(storeUrl)}`} target="_blank" rel="noreferrer" className="text-xs font-medium px-3 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition">💬 Share</a>
+            <a href={storeUrl} target="_blank" rel="noreferrer" className="text-xs font-medium px-3 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition">Preview</a>
+            <a href={`https://wa.me/?text=Check out my store: ${encodeURIComponent(storeUrl)}`} target="_blank" rel="noreferrer" className="text-xs font-medium px-3 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition">Share on WhatsApp</a>
           </div>
         </div>
 
@@ -236,7 +245,9 @@ export default function Dashboard() {
         </div>
 
         {/* Add product button */}
-        <button onClick={() => setShowAddProduct(true)} className="w-full py-4 rounded-2xl border-2 border-dashed text-sm font-medium transition" style={{ borderColor: palette.primary, color: palette.primary, backgroundColor: palette.bg }}>+ Add new product</button>
+        <button onClick={() => setShowAddProduct(true)} className="w-full py-4 rounded-2xl border-2 border-dashed text-sm font-medium transition" style={{ borderColor: palette.primary, color: palette.primary, backgroundColor: palette.bg }}>
+          + Add new product
+        </button>
 
         {/* Add Product Form */}
         {showAddProduct && (
@@ -247,23 +258,43 @@ export default function Dashboard() {
             </div>
             <label className="block cursor-pointer">
               <div className="w-full h-40 rounded-xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden hover:border-gray-300 transition">
-                {productForm.mediaPreview ? (productForm.mediaType === 'video' ? <video src={productForm.mediaPreview} className="w-full h-full object-cover" /> : <img src={productForm.mediaPreview} alt="Product" className="w-full h-full object-cover" />) : <div className="text-center"><div className="text-3xl">🖼</div><p className="text-sm text-gray-400 mt-1">Tap to add photo or video</p></div>}
+                {productForm.mediaPreview
+                  ? (productForm.mediaType === 'video'
+                    ? <video src={productForm.mediaPreview} className="w-full h-full object-cover" />
+                    : <img src={productForm.mediaPreview} alt="Product" className="w-full h-full object-cover" />)
+                  : <div className="text-center text-gray-400"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mx-auto mb-2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><p className="text-sm">Tap to add photo or video</p></div>
+                }
               </div>
               <input type="file" accept="image/*,video/*" onChange={handleMediaChange} className="hidden" />
             </label>
-            <div><label className="block text-sm font-medium text-gray-600 mb-1">Product name *</label><input type="text" value={productForm.name} onChange={e => setProductForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Jollof Rice + Chicken" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" /></div>
-            <div><label className="block text-sm font-medium text-gray-600 mb-1">Price (₦) *</label><input type="number" value={productForm.price} onChange={e => setProductForm(f => ({ ...f, price: e.target.value }))} placeholder="2500" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" /></div>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">Product name *</label>
+              <input type="text" value={productForm.name} onChange={e => setProductForm(f => ({ ...f, name: e.target.value }))} placeholder="e.g. Jollof Rice + Chicken" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">Price (₦) *</label>
+              <input type="number" value={productForm.price} onChange={e => setProductForm(f => ({ ...f, price: e.target.value }))} placeholder="2500" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" />
+            </div>
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-sm font-medium text-gray-600">Description</label>
-                <button onClick={generateDescription} disabled={generatingDesc} className="text-xs font-medium px-3 py-1 rounded-lg transition" style={{ backgroundColor: palette.bg, color: palette.primary }}>{generatingDesc ? 'Writing...' : '✨ AI write it'}</button>
+                <button onClick={generateDescription} disabled={generatingDesc} className="text-xs font-medium px-3 py-1 rounded-lg transition" style={{ backgroundColor: palette.bg, color: palette.primary }}>
+                  {generatingDesc ? 'Writing...' : 'AI write it'}
+                </button>
               </div>
               <textarea value={productForm.description} onChange={e => setProductForm(f => ({ ...f, description: e.target.value }))} placeholder="Describe this product..." rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition resize-none" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2">Stock status</label>
               <div className="grid grid-cols-2 gap-2">
-                {STOCK_TAGS.map(tag => <button key={tag.id} onClick={() => setProductForm(f => ({ ...f, stock_tag: tag.id }))} className={`px-3 py-2 rounded-xl text-xs font-medium border-2 transition ${productForm.stock_tag === tag.id ? 'border-gray-800' : 'border-transparent'}`} style={{ backgroundColor: tag.bg, color: tag.color }}>{tag.label}</button>)}
+                {STOCK_TAGS.map(tag => (
+                  <button key={tag.id} onClick={() => setProductForm(f => ({ ...f, stock_tag: tag.id }))}
+                    className={`px-3 py-2 rounded-xl text-xs font-medium border-2 transition text-left flex items-center gap-2 ${productForm.stock_tag === tag.id ? 'border-gray-800' : 'border-transparent'}`}
+                    style={{ backgroundColor: tag.bg }}>
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: tag.dot }} />
+                    <span style={{ color: tag.color }}>{tag.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
             <div className="flex gap-3">
@@ -281,16 +312,27 @@ export default function Dashboard() {
               const stockTag = getStockTag(product.stock_tag);
               return (
                 <div key={product.id} className="bg-white rounded-2xl border border-gray-100 overflow-hidden flex">
-                  {product.media_url && <div className="w-24 h-24 flex-shrink-0">{product.media_type === 'video' ? <video src={product.media_url} className="w-full h-full object-cover" /> : <img src={product.media_url} alt={product.name} className="w-full h-full object-cover" />}</div>}
+                  {product.media_url && (
+                    <div className="w-24 h-24 flex-shrink-0">
+                      {product.media_type === 'video'
+                        ? <video src={product.media_url} className="w-full h-full object-cover" />
+                        : <img src={product.media_url} alt={product.name} className="w-full h-full object-cover" />}
+                    </div>
+                  )}
                   <div className="flex-1 p-3 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <p className="font-semibold text-gray-800 text-sm truncate">{product.name}</p>
                         <p className="text-sm font-bold mt-0.5" style={{ color: palette.primary }}>₦{Number(product.price).toLocaleString()}</p>
-                        {stockTag && <span className="inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: stockTag.bg, color: stockTag.color }}>{stockTag.label}</span>}
+                        {stockTag && (
+                          <span className="inline-flex items-center gap-1.5 mt-1 text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: stockTag.bg, color: stockTag.color }}>
+                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: stockTag.dot }} />
+                            {stockTag.label}
+                          </span>
+                        )}
                       </div>
                       <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                        <button onClick={() => openEditProduct(product)} className="text-xs px-2 py-1 rounded-lg font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition">✏️ Edit</button>
+                        <button onClick={() => openEditProduct(product)} className="text-xs px-2 py-1 rounded-lg font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 transition">Edit</button>
                         <button onClick={() => handleDeleteProduct(product.id)} className="text-xs text-red-400 hover:text-red-600 transition">Delete</button>
                       </div>
                     </div>
@@ -301,7 +343,15 @@ export default function Dashboard() {
           </div>
         )}
 
-        {products.length === 0 && !showAddProduct && <div className="text-center py-12 text-gray-400"><div className="text-5xl mb-3">📦</div><p className="font-medium text-gray-500">No products yet</p><p className="text-sm mt-1">Add your first product to go live</p></div>}
+        {products.length === 0 && !showAddProduct && (
+          <div className="text-center py-12 text-gray-400">
+            <div className="w-16 h-16 rounded-2xl bg-gray-100 mx-auto mb-4 flex items-center justify-center">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+            </div>
+            <p className="font-medium text-gray-500">No products yet</p>
+            <p className="text-sm mt-1">Add your first product to go live</p>
+          </div>
+        )}
       </div>
 
       {/* Edit Profile Modal */}
@@ -315,28 +365,52 @@ export default function Dashboard() {
             <div className="flex justify-center mb-4">
               <label className="cursor-pointer">
                 <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-dashed border-gray-200 flex items-center justify-center hover:border-orange-400 transition">
-                  {profileForm.logoPreview ? <img src={profileForm.logoPreview} alt="Logo" className="w-full h-full object-cover" /> : <div className="text-center"><div className="text-xl">📸</div><div className="text-xs text-gray-400">Logo</div></div>}
+                  {profileForm.logoPreview
+                    ? <img src={profileForm.logoPreview} alt="Logo" className="w-full h-full object-cover" />
+                    : <div className="text-center text-gray-400 text-xs">Add logo</div>}
                 </div>
                 <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
               </label>
             </div>
             <div className="space-y-4">
-              <div><label className="block text-sm font-medium text-gray-600 mb-1">Business name *</label><input type="text" value={profileForm.business_name} onChange={e => setProfileForm(f => ({ ...f, business_name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" /></div>
-              <div><label className="block text-sm font-medium text-gray-600 mb-1">Bio</label><textarea value={profileForm.bio} onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition resize-none" /></div>
-              <div><label className="block text-sm font-medium text-gray-600 mb-1">WhatsApp number *</label><input type="tel" value={profileForm.whatsapp_number} onChange={e => setProfileForm(f => ({ ...f, whatsapp_number: e.target.value }))} placeholder="+2348012345678" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" /></div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Business name *</label>
+                <input type="text" value={profileForm.business_name} onChange={e => setProfileForm(f => ({ ...f, business_name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Bio</label>
+                <textarea value={profileForm.bio} onChange={e => setProfileForm(f => ({ ...f, bio: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition resize-none" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">WhatsApp number *</label>
+                <input type="tel" value={profileForm.whatsapp_number} onChange={e => setProfileForm(f => ({ ...f, whatsapp_number: e.target.value }))} placeholder="+2348012345678" className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" />
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-2">Brand colour</label>
                 <div className="grid grid-cols-3 gap-2">
-                  {PALETTE_LIST.map(p => <button key={p.id} onClick={() => setProfileForm(f => ({ ...f, palette: p.id }))} className={`p-2 rounded-xl border-2 flex items-center gap-2 transition ${profileForm.palette === p.id ? 'border-gray-800' : 'border-transparent'}`} style={{ backgroundColor: p.bg }}><div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: p.primary }} /><span className="text-xs font-medium truncate" style={{ color: p.text }}>{p.label}</span></button>)}
+                  {PALETTE_LIST.map(p => (
+                    <button key={p.id} onClick={() => setProfileForm(f => ({ ...f, palette: p.id }))}
+                      className={`p-2 rounded-xl border-2 flex items-center gap-2 transition ${profileForm.palette === p.id ? 'border-gray-800' : 'border-transparent'}`}
+                      style={{ backgroundColor: p.bg }}>
+                      <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: p.primary }} />
+                      <span className="text-xs font-medium truncate" style={{ color: p.text }}>{p.label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div><p className="text-sm font-medium text-gray-800">Set store as inactive</p><p className="text-xs text-gray-400 mt-0.5">Shows "be right back" to customers</p></div>
-                <button onClick={() => setProfileForm(f => ({ ...f, is_inactive: !f.is_inactive }))} className={`w-12 h-6 rounded-full transition-colors relative ${profileForm.is_inactive ? 'bg-orange-500' : 'bg-gray-200'}`}>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">Set store as inactive</p>
+                  <p className="text-xs text-gray-400 mt-0.5">Shows "be right back" to customers</p>
+                </div>
+                <button onClick={() => setProfileForm(f => ({ ...f, is_inactive: !f.is_inactive }))}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${profileForm.is_inactive ? 'bg-orange-500' : 'bg-gray-200'}`}>
                   <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${profileForm.is_inactive ? 'translate-x-7' : 'translate-x-1'}`} />
                 </button>
               </div>
-              <button onClick={handleSaveProfile} disabled={savingProfile} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-60">{savingProfile ? 'Saving...' : 'Save changes'}</button>
+              <button onClick={handleSaveProfile} disabled={savingProfile} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-60">
+                {savingProfile ? 'Saving...' : 'Save changes'}
+              </button>
             </div>
           </div>
         </div>
@@ -351,22 +425,44 @@ export default function Dashboard() {
               <button onClick={() => setEditingProduct(null)} className="text-gray-400 text-2xl">×</button>
             </div>
             <div className="space-y-4">
-              <div><label className="block text-sm font-medium text-gray-600 mb-1">Product name *</label><input type="text" value={editProductForm.name} onChange={e => setEditProductForm(f => ({ ...f, name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" /></div>
-              <div><label className="block text-sm font-medium text-gray-600 mb-1">Price (₦) *</label><input type="number" value={editProductForm.price} onChange={e => setEditProductForm(f => ({ ...f, price: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" /></div>
-              <div><label className="block text-sm font-medium text-gray-600 mb-1">Description</label><textarea value={editProductForm.description} onChange={e => setEditProductForm(f => ({ ...f, description: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition resize-none" /></div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Product name *</label>
+                <input type="text" value={editProductForm.name} onChange={e => setEditProductForm(f => ({ ...f, name: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Price (₦) *</label>
+                <input type="number" value={editProductForm.price} onChange={e => setEditProductForm(f => ({ ...f, price: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Description</label>
+                <textarea value={editProductForm.description} onChange={e => setEditProductForm(f => ({ ...f, description: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-orange-400 transition resize-none" />
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-2">Stock status</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {STOCK_TAGS.map(tag => <button key={tag.id} onClick={() => setEditProductForm(f => ({ ...f, stock_tag: tag.id }))} className={`px-3 py-2 rounded-xl text-xs font-medium border-2 transition ${editProductForm.stock_tag === tag.id ? 'border-gray-800' : 'border-transparent'}`} style={{ backgroundColor: tag.bg, color: tag.color }}>{tag.label}</button>)}
+                  {STOCK_TAGS.map(tag => (
+                    <button key={tag.id} onClick={() => setEditProductForm(f => ({ ...f, stock_tag: tag.id }))}
+                      className={`px-3 py-2 rounded-xl text-xs font-medium border-2 transition text-left flex items-center gap-2 ${editProductForm.stock_tag === tag.id ? 'border-gray-800' : 'border-transparent'}`}
+                      style={{ backgroundColor: tag.bg }}>
+                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: tag.dot }} />
+                      <span style={{ color: tag.color }}>{tag.label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                <div><p className="text-sm font-medium text-gray-800">Show on storefront</p><p className="text-xs text-gray-400 mt-0.5">Hide to remove from public view</p></div>
-                <button onClick={() => setEditProductForm(f => ({ ...f, is_available: !f.is_available }))} className={`w-12 h-6 rounded-full transition-colors relative ${editProductForm.is_available ? 'bg-green-500' : 'bg-gray-200'}`}>
+                <div>
+                  <p className="text-sm font-medium text-gray-800">Show on storefront</p>
+                  <p className="text-xs text-gray-400 mt-0.5">Hide to remove from public view</p>
+                </div>
+                <button onClick={() => setEditProductForm(f => ({ ...f, is_available: !f.is_available }))}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${editProductForm.is_available ? 'bg-green-500' : 'bg-gray-200'}`}>
                   <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${editProductForm.is_available ? 'translate-x-7' : 'translate-x-1'}`} />
                 </button>
               </div>
-              <button onClick={handleSaveProduct} disabled={savingProduct} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-60">{savingProduct ? 'Saving...' : 'Save changes'}</button>
+              <button onClick={handleSaveProduct} disabled={savingProduct} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition disabled:opacity-60">
+                {savingProduct ? 'Saving...' : 'Save changes'}
+              </button>
             </div>
           </div>
         </div>
