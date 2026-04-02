@@ -11,10 +11,10 @@ const PALETTES = {
 };
 
 const STOCK_TAGS = {
-  fully_stocked: { label: '✅ Fully stocked', color: '#16a34a', bg: '#f0fdf4' },
-  limited_stock: { label: '⚠️ Limited stock', color: '#d97706', bg: '#fffbeb' },
-  running_out: { label: '🔥 Running out', color: '#ea580c', bg: '#fff7ed' },
-  out_of_stock: { label: '❌ Out of stock', color: '#dc2626', bg: '#fef2f2' },
+  fully_stocked: { label: 'Fully stocked', color: '#16a34a', bg: '#f0fdf4' },
+  limited_stock: { label: 'Limited stock', color: '#d97706', bg: '#fffbeb' },
+  running_out: { label: 'Running out', color: '#ea580c', bg: '#fff7ed' },
+  out_of_stock: { label: 'Out of stock', color: '#dc2626', bg: '#fef2f2' },
 };
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
@@ -166,7 +166,8 @@ export default function Storefront() {
                       <p className="font-semibold text-gray-800 text-sm leading-tight truncate">{product.name}</p>
                       <p className="font-bold text-sm mt-1" style={{ color: palette.primary }}>₦{Number(product.price).toLocaleString()}</p>
                       {stockTag && !isOutOfStock && (
-                        <span className="inline-block mt-1.5 text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: stockTag.bg, color: stockTag.color }}>
+                        <span className="inline-flex items-center gap-1.5 mt-1.5 text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: stockTag.bg, color: stockTag.color }}>
+                          <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: stockTag.color }} />
                           {stockTag.label}
                         </span>
                       )}
@@ -201,7 +202,8 @@ export default function Storefront() {
               <h2 className="text-xl font-bold text-gray-800">{selectedProduct.name}</h2>
               <p className="text-2xl font-bold mt-1" style={{ color: palette.primary }}>₦{Number(selectedProduct.price).toLocaleString()}</p>
               {selectedProduct.stock_tag && STOCK_TAGS[selectedProduct.stock_tag] && (
-                <span className="inline-block mt-2 text-xs font-medium px-2 py-1 rounded-full" style={{ backgroundColor: STOCK_TAGS[selectedProduct.stock_tag].bg, color: STOCK_TAGS[selectedProduct.stock_tag].color }}>
+                <span className="inline-flex items-center gap-1.5 mt-2 text-xs font-medium px-2 py-1 rounded-full" style={{ backgroundColor: STOCK_TAGS[selectedProduct.stock_tag].bg, color: STOCK_TAGS[selectedProduct.stock_tag].color }}>
+                  <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: STOCK_TAGS[selectedProduct.stock_tag].color }} />
                   {STOCK_TAGS[selectedProduct.stock_tag].label}
                 </span>
               )}
