@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/dashboard`
+        redirectTo: `https://eazee-lac.vercel.app/dashboard`
       }
     });
     return { data, error };
