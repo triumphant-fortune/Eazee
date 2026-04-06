@@ -7,6 +7,7 @@ import Onboarding from './pages/Onboarding';
 import Dashboard from './pages/Dashboard';
 import Storefront from './pages/Storefront';
 import CaptionGenerator from './pages/CaptionGenerator';
+import Landing from './pages/Landing';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -22,12 +23,12 @@ const AppRoutes = () => {
   const { user } = useAuth();
   return (
     <Routes>
+      <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Landing />} />
       <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login />} />
       <Route path="/onboarding" element={<PrivateRoute><Onboarding /></PrivateRoute>} />
       <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
       <Route path="/captions" element={<PrivateRoute><CaptionGenerator /></PrivateRoute>} />
       <Route path="/store/:slug" element={<Storefront />} />
-      <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
     </Routes>
   );
 };
