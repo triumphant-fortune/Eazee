@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// ⚠️ Replace this import path with your actual screenshot image
+import storePic from './public/simply she.png';
+
 const TICKER_ITEMS = [
   'Chop n Go — Calabar',
   'Simply She — Lagos',
@@ -104,7 +107,7 @@ export default function Landing() {
 
         @media(max-width:768px) {
           .hero-grid { grid-template-columns: 1fr !important; }
-          .hide-sm { display: none !important; }
+          .hero-screenshot-col { margin-top: 32px; }
           .products-scroll { display: flex !important; overflow-x: auto !important; gap: 14px !important; padding-bottom: 12px; scroll-snap-type: x mandatory; }
           .products-scroll::-webkit-scrollbar { display: none; }
           .product-snap { scroll-snap-align: start; flex-shrink: 0 !important; width: 180px !important; }
@@ -151,7 +154,6 @@ export default function Landing() {
 
       {/* ─── HERO ─── */}
       <div style={{ background: 'linear-gradient(180deg, #fff7ed 0%, #fffbf7 100%)', padding: '72px 24px 64px', position: 'relative', overflow: 'hidden' }}>
-        {/* Decorative blobs */}
         <div style={{ position: 'absolute', top: -60, right: -80, width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -40, left: -60, width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle, rgba(249,115,22,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
@@ -196,51 +198,46 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Right — floating storefront cards */}
-          <div className="hide-sm" style={{ position: 'relative', height: 480, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* Main phone card */}
-            <div className="float" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: 240, background: 'white', borderRadius: 28, border: '1.5px solid #f0f0f0', boxShadow: '0 24px 64px rgba(0,0,0,0.14)', overflow: 'hidden', zIndex: 3 }}>
-              <div style={{ background: '#fff7ed', padding: '18px 16px 14px', textAlign: 'center' }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: '#f97316', margin: '0 auto 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontFamily: 'Sora', fontWeight: 800, fontSize: 18 }}>C</div>
-                <div className="sora" style={{ fontWeight: 700, fontSize: 13, color: '#0f172a' }}>Chop n Go</div>
-                <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>Fresh food, delivered daily.</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 6, background: '#fff7ed', border: '1px solid #fed7aa', color: '#ea580c', fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 50, fontFamily: 'Sora' }}>
-                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#f97316', display: 'inline-block' }} />
-                  Store is open
-                </div>
-              </div>
-              <div style={{ padding: '10px 10px 6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                {[{ bg: '#fef3c7', name: 'Jollof Rice', price: '₦2,500' }, { bg: '#fce7f3', name: 'Peppered Fish', price: '₦3,800' }, { bg: '#f0fdf4', name: 'Fried Chicken', price: '₦4,200' }, { bg: '#ede9fe', name: 'Chapman', price: '₦1,200' }].map((p, i) => (
-                  <div key={i} style={{ background: '#f9f9f9', borderRadius: 10, overflow: 'hidden' }}>
-                    <div style={{ width: '100%', aspectRatio: '1', background: p.bg }} />
-                    <div style={{ padding: '4px 6px 6px' }}>
-                      <div className="sora" style={{ fontSize: 9, fontWeight: 700, color: '#0f172a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
-                      <div style={{ fontSize: 9, fontWeight: 700, color: '#f97316', marginTop: 1 }}>{p.price}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ padding: '4px 10px 12px' }}>
-                <div className="sora" style={{ background: '#25D366', color: 'white', fontWeight: 700, fontSize: 10, padding: '8px', borderRadius: 10, textAlign: 'center' }}>Message Vendor on WhatsApp</div>
-              </div>
-            </div>
+          {/* ─── RIGHT: Real store screenshot, visible on all screen sizes ─── */}
+          {/* FIX 1: Replaced the fake div-based phone mockup with a real <img> */}
+          {/* FIX 2: Removed hide-sm class so this column now shows on mobile too */}
+          <div className="hero-screenshot-col" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-            {/* Floating badges */}
-            <div className="float-2" style={{ position: 'absolute', top: 40, right: 10, background: 'white', borderRadius: 16, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.1)', border: '1px solid #f3f4f6', zIndex: 4 }}>
+            {/* Floating badge — New order */}
+            <div className="float-2" style={{ position: 'absolute', top: 16, right: 0, background: 'white', borderRadius: 16, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.1)', border: '1px solid #f3f4f6', zIndex: 4 }}>
               <div className="sora" style={{ fontSize: 11, fontWeight: 700, color: '#0f172a' }}>New order</div>
               <div style={{ fontSize: 10, color: '#6b7280', marginTop: 2 }}>Jollof Rice + Chicken — ₦6,700</div>
               <div style={{ fontSize: 10, color: '#16a34a', fontWeight: 600, marginTop: 3 }}>via WhatsApp</div>
             </div>
 
-            <div className="float-3" style={{ position: 'absolute', bottom: 60, left: 10, background: 'white', borderRadius: 16, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.1)', border: '1px solid #f3f4f6', zIndex: 4 }}>
-              <div className="sora" style={{ fontSize: 11, fontWeight: 700, color: '#0f172a' }}>eazee.store/chop-n-go</div>
+            {/* Floating badge — 47 views */}
+            <div className="float" style={{ position: 'absolute', top: 64, left: 0, background: '#f97316', borderRadius: 14, padding: '8px 12px', boxShadow: '0 6px 16px rgba(249,115,22,0.35)', zIndex: 4, animationDelay: '0.5s' }}>
+              <div className="sora" style={{ fontSize: 11, fontWeight: 800, color: 'white' }}>47 views today</div>
+            </div>
+
+            {/* Floating badge — store link */}
+            <div className="float-3" style={{ position: 'absolute', bottom: 16, left: 0, background: 'white', borderRadius: 16, padding: '10px 14px', boxShadow: '0 8px 24px rgba(0,0,0,0.1)', border: '1px solid #f3f4f6', zIndex: 4 }}>
+              <div className="sora" style={{ fontSize: 11, fontWeight: 700, color: '#0f172a' }}>eazee.store/simply-she</div>
               <div style={{ fontSize: 10, color: '#6b7280', marginTop: 2 }}>Your store link, live 24/7</div>
             </div>
 
-            <div className="float" style={{ position: 'absolute', top: 80, left: 8, background: '#f97316', borderRadius: 14, padding: '8px 12px', boxShadow: '0 6px 16px rgba(249,115,22,0.35)', zIndex: 4, animationDelay: '0.5s' }}>
-              <div className="sora" style={{ fontSize: 11, fontWeight: 800, color: 'white' }}>47 views today</div>
-            </div>
+            {/* Real store screenshot */}
+            <img
+              src={storePic}
+              alt="Simply She store on Eazee"
+              style={{
+                width: '100%',
+                maxWidth: 280,
+                borderRadius: 28,
+                boxShadow: '0 24px 64px rgba(0,0,0,0.14)',
+                border: '1.5px solid #f0f0f0',
+                display: 'block',
+                position: 'relative',
+                zIndex: 3,
+              }}
+            />
           </div>
+
         </div>
       </div>
 
