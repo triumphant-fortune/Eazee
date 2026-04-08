@@ -150,7 +150,7 @@ export default function Storefront() {
                     <div className="p-2.5">
                       <p className="font-semibold text-gray-800 text-xs leading-tight truncate">{product.name}</p>
                       <p className="font-bold text-xs mt-1" style={{ color: palette.primary }}>₦{Number(product.price).toLocaleString()}</p>
-                      {stockTag && !isOutOfStock && product.stock_tag !== 'fully_stocked' && (
+                      {stockTag && !isOutOfStock && (
                         <div className="flex items-center gap-1 mt-1.5">
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: stockTag.dot }} />
                           <span className="text-xs" style={{ color: stockTag.color }}>{stockTag.label}</span>
