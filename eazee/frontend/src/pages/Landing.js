@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 // ⚠️ Replace this import path with your actual screenshot image
 import storePic from '../assets/simply-she.png';
-// ⚠️ Add this import — save eazee-order.jpeg into your assets folder
-import whatsappMsg from '../assets/eazee-order.jpeg';
+// ⚠️ Add this import — save eazee_order.jpeg into your assets folder
+import whatsappMsg from '../assets/eazee_order.jpeg';
 
 const TICKER_ITEMS = [
   'Chop n Go — Calabar',
@@ -21,7 +21,7 @@ const PRODUCTS = [
   { img: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=300&q=80', name: 'Body Butter', price: '₦8,500', store: 'Ada Glow', palette: '#f97316' },
   { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=80', name: 'Custom Air Force', price: '₦45,000', store: 'ET Sneakers', palette: '#7c3aed' },
   { img: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&q=80', name: 'Gold Earrings', price: '₦12,000', store: 'Simply She', palette: '#e11d48' },
-  { img: 'https://unsplash.com/photos/assorted-color-textiles-SfPOkp6-2eA', name: 'Ankara Fabric', price: '₦32,000', store: 'Bless Fabrics', palette: '#16a34a' },
+  { img: 'https://images.unsplash.com/photo-1552710307-537199cd41c0?q=80', name: 'Ankara Fabric', price: '₦32,000', store: 'Bless Fabrics', palette: '#16a34a' },
   { img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&q=80', name: 'Nike AF1 Purple', price: '₦55,000', store: 'ET Sneakers', palette: '#7c3aed' },
   { img: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=300&q=80', name: 'Skincare Bundle', price: '₦22,000', store: 'Ada Glow', palette: '#f97316' },
 ];
