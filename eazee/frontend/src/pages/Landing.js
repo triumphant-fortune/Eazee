@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 // ⚠️ Replace this import path with your actual screenshot image
 import storePic from '../assets/simply-she.png';
-// ⚠️ Add this import — save eazee_order.jpeg into your assets folder
-import whatsappMsg from '../assets/eazee_order.jpeg';
+// ⚠️ Add this import — save eazee-order.jpeg into your assets folder
+import whatsappMsg from '../assets/eazee-order.jpeg';
 
 const TICKER_ITEMS = [
   'Chop n Go — Calabar',
