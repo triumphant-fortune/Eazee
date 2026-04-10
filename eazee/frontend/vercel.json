@@ -1,6 +1,20 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/store/:slug",
+      "destination": "https://eazee-backend.onrender.com/api/preview/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(whatsapp|facebookexternalhit|twitterbot|linkedinbot|telegrambot|discordbot|googlebot|bingbot|slackbot|applebot|pinterestbot|vkshare|w3c_validator|ia_archiver|baiduspider|yandexbot|duckduckbot).*"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
   ],
   "headers": [
     {
