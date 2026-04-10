@@ -5,6 +5,7 @@ import vendorRoutes from './routes/vendor.js';
 import productRoutes from './routes/product.js';
 import aiRoutes from './routes/ai.js';
 import storefrontRoutes from './routes/storefront.js';
+import previewRoutes from './routes/preview.js';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use('/api/vendor', vendorRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/storefront', storefrontRoutes);
+app.use('/api/preview', previewRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -34,6 +34,24 @@ export default function Storefront() {
         if (data.error) { setNotFound(true); return; }
         setVendor(data.vendor);
         setProducts(data.products);
+        const v = data.vendor;
+        const title = `${v.business_name} | Eazee Store`;
+        const desc = v.bio ? `${v.bio} — Browse and order on WhatsApp.` : `Shop ${v.business_name} on Eazee. Order directly on WhatsApp.`;
+        const img = v.logo_url || data.products?.[0]?.media_url || `${window.location.origin}/og-image.png`;
+        document.title = title;
+        const setMeta = (prop, val, attr = 'property') => {
+          let el = document.querySelector(`meta[${attr}="${prop}"]`);
+          if (!el) { el = document.createElement('meta'); el.setAttribute(attr, prop); document.head.appendChild(el); }
+          el.setAttribute('content', val);
+        };
+        setMeta('og:title', title);
+        setMeta('og:description', desc);
+        setMeta('og:image', img);
+        setMeta('og:url', window.location.href);
+        setMeta('twitter:title', title);
+        setMeta('twitter:description', desc);
+        setMeta('twitter:image', img);
+        setMeta('description', desc, 'name');
       })
       .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
