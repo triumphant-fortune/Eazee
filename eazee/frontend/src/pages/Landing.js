@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import storePic from '../assets/simply-she.png';
-import whatsappMsg from '../assets/eazee_order.jpeg';
+import whatsappMsg from '../assets/eazee-order.jpeg';
 
 const TICKER_ITEMS = [
   'Chop n Go  - Calabar',
