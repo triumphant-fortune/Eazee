@@ -19,7 +19,7 @@ const PRODUCTS = [
   { img: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=300&q=80', name: 'Body Butter', price: '₦8,500', store: 'Ada Glow', palette: '#f97316' },
   { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=80', name: 'Custom Air Force', price: '₦45,000', store: 'ET Sneakers', palette: '#7c3aed' },
   { img: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&q=80', name: 'Gold Earrings', price: '₦12,000', store: 'Simply She', palette: '#e11d48' },
-  { img: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=300&q=80', name: 'Ankara Co-ord', price: '₦32,000', store: 'Blessing Fabrics', palette: '#16a34a' },
+  { img: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=300&q=80', name: 'Ankara Vibes, price: '₦20,000', store: 'Blessing Fabrics', palette: '#16a34a' },
   { img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&q=80', name: 'Nike AF1 Purple', price: '₦55,000', store: 'ET Sneakers', palette: '#7c3aed' },
   { img: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=300&q=80', name: 'Skincare Bundle', price: '₦22,000', store: 'Ada Glow', palette: '#f97316' },
 ];
@@ -196,7 +196,9 @@ export default function Landing() {
             </div>
 
             <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-              {[['Free to start', 'no credit card'], ['Ready in minutes', 'not days'], ['No fees', 'on your sales']].map(([a, b], i) => (
+              {[['Free to start', 'No credit card needed'],
+              ['Ready in minutes', 'Not days'],
+               ['Zero fees', 'On every sale you make']].map(([a, b], i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#f97316', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
